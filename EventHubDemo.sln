@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHubPublisherDemo", "EventHubPublisherDemo\EventHubPublisherDemo.csproj", "{1DD3F163-5E4F-4AA7-8702-ADA787625183}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHubReceiverDemo", "EventHubReceiverDemo\EventHubReceiverDemo.csproj", "{7001F9B1-5897-43A2-A4BA-91C693139C88}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1DD3F163-5E4F-4AA7-8702-ADA787625183}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DD3F163-5E4F-4AA7-8702-ADA787625183}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DD3F163-5E4F-4AA7-8702-ADA787625183}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DD3F163-5E4F-4AA7-8702-ADA787625183}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7001F9B1-5897-43A2-A4BA-91C693139C88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7001F9B1-5897-43A2-A4BA-91C693139C88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7001F9B1-5897-43A2-A4BA-91C693139C88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7001F9B1-5897-43A2-A4BA-91C693139C88}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
