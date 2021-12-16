@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <UserSecretsId>dotnet-ReceiverWorker-FB630CFA-B08F-471D-9FC6-06CED259B6B0</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Azure.Messaging.EventHubs" Version="5.6.2" />
+        <PackageReference Include="Azure.Messaging.EventHubs.Processor" Version="5.6.2" />
+        <PackageReference Include="Azure.Storage.Blobs" Version="12.8.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    </ItemGroup>
+</Project>

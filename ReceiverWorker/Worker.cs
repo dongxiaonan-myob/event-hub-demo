@@ -1,39 +1,49 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using Azure.Storage.Blobs;
 using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Consumer;
 using Azure.Messaging.EventHubs.Processor;
+using Azure.Storage.Blobs;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-namespace EventHubPublisherDemo
+namespace ReceiverWorker
 {
-    class Program
+    public class Worker : BackgroundService
     {
-        private const string ehubNamespaceConnectionString1 = "<event hub connection string>";
-        private const string eventHubName1 = "<event hub name>";
-        private const string blobStorageConnectionString1 = "<blob storage connection string>";
-        private const string blobContainerName1 = "<blog storage container name>";
-        
-        // The Event Hubs client types are safe to cache and use as a singleton for the lifetime
-        // of the application, which is best practice when events are being published or read regularly.        
-        static EventProcessorClient processor;
-        static BlobContainerClient storageClient;
-        static async Task Main()
+        private readonly ILogger<Worker> _logger;
+        private const string ehubNamespaceConnectionString = "<event hub connection string>";
+        private const string eventHubName = "<event hub name>";
+        private const string blobStorageConnectionString = "<blob storage connection string>";
+        private const string blobContainerName = "<blog storage container name>";
+
+        public Worker(ILogger<Worker> logger)
         {
-            // Read from the default consumer group: $Default
-            await ReceiveEvents();
+            _logger = logger;
         }
 
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                await ReceiveEvents();
+            }
+        }
+        
         private static async Task ReceiveEvents()
         {
             string consumerGroup = EventHubConsumerClient.DefaultConsumerGroupName;
 
             // Create a blob container client that the event processor will use 
-            storageClient = new BlobContainerClient(blobStorageConnectionString1, blobContainerName1);
+            var storageClient = new BlobContainerClient(blobStorageConnectionString, blobContainerName);
 
             // Create an event processor client to process events in the event hub
-            processor = new EventProcessorClient(storageClient, consumerGroup, ehubNamespaceConnectionString1, eventHubName1);
+            var processor = new EventProcessorClient(storageClient, consumerGroup, ehubNamespaceConnectionString, eventHubName);
 
             // Register handlers for processing events and handling errors
             processor.ProcessEventAsync += ProcessEventHandler;
@@ -49,11 +59,11 @@ namespace EventHubPublisherDemo
             await processor.StopProcessingAsync();
             Console.WriteLine("Hello World!");
         }
-
+        
         static async Task ProcessEventHandler(ProcessEventArgs eventArgs)
         {
             // Write the body of the event to the console window
-            Console.WriteLine("\tReceived event: {0}", Encoding.UTF8.GetString(eventArgs.Data.Body.ToArray()));
+            Console.WriteLine("\tReceived partition: {0}, Received event: {1}", eventArgs.Partition.PartitionId, Encoding.UTF8.GetString(eventArgs.Data.Body.ToArray()));
 
             // Update checkpoint in the blob storage so that the app receives only new events the next time it's run
             await eventArgs.UpdateCheckpointAsync(eventArgs.CancellationToken);
